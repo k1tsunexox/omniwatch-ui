@@ -1,4 +1,5 @@
 import StatRing from './components/StatRing'
+import TimeDisplay from './components/TimeDisplay'
 
 function App() {
   return (
@@ -45,22 +46,11 @@ function App() {
             </span>
           </div>
 
-          {/* Time */}
-          <div className="flex flex-col items-center mb-10">
-            <span
-              className="text-6xl font-light
-              tracking-tight text-[#967E76]"
-            >
-              10:42
-            </span>
-
-            <span
-              className="text-sm tracking-[0.3em]
-              text-[#B7C4CF] mt-2"
-            >
-              AM
-            </span>
-          </div>
+          {/* Time Display */}
+          <TimeDisplay
+            time="10:42"
+            period="AM"
+          />
 
           {/* Stats */}
           <div className="flex gap-5 mb-10">
