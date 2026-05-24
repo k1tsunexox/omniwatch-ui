@@ -1,3 +1,5 @@
+import StatRing from './components/StatRing'
+
 function App() {
   return (
     <div
@@ -62,107 +64,26 @@ function App() {
 
           {/* Stats */}
           <div className="flex gap-5 mb-10">
-            {/* Steps */}
-            <div className="flex flex-col items-center">
-              <div
-                className="w-20 h-20 rounded-full
-                border-[6px] border-[#B7C4CF]
-                flex items-center justify-center"
-              >
-                <div
-                  className="w-14 h-14 rounded-full
-                  flex flex-col items-center justify-center"
-                >
-                  <span
-                    className="text-sm font-medium
-                    text-[#967E76]"
-                  >
-                    8,432
-                  </span>
+            <StatRing
+              label="Steps"
+              value="8,432"
+              target="10,000"
+              color="border-[#B7C4CF]"
+            />
 
-                  <span
-                    className="text-[10px]
-                    tracking-wide text-[#B7C4CF]"
-                  >
-                    Steps
-                  </span>
-                </div>
-              </div>
+            <StatRing
+              label="Calories"
+              value="420"
+              target="600"
+              color="border-[#D7C0AE]"
+            />
 
-              <span
-                className="text-xs mt-2 text-[#967E76]"
-              >
-                / 10,000
-              </span>
-            </div>
-
-            {/* Calories */}
-            <div className="flex flex-col items-center">
-              <div
-                className="w-20 h-20 rounded-full
-                border-[6px] border-[#D7C0AE]
-                flex items-center justify-center"
-              >
-                <div
-                  className="w-14 h-14 rounded-full
-                  flex flex-col items-center justify-center"
-                >
-                  <span
-                    className="text-sm font-medium
-                    text-[#967E76]"
-                  >
-                    420
-                  </span>
-
-                  <span
-                    className="text-[10px]
-                    tracking-wide text-[#B7C4CF]"
-                  >
-                    Calories
-                  </span>
-                </div>
-              </div>
-
-              <span
-                className="text-xs mt-2 text-[#967E76]"
-              >
-                / 600
-              </span>
-            </div>
-
-            {/* Heart Rate */}
-            <div className="flex flex-col items-center">
-              <div
-                className="w-20 h-20 rounded-full
-                border-[6px] border-[#967E76]
-                flex items-center justify-center"
-              >
-                <div
-                  className="w-14 h-14 rounded-full
-                  flex flex-col items-center justify-center"
-                >
-                  <span
-                    className="text-sm font-medium
-                    text-[#967E76]"
-                  >
-                    72
-                  </span>
-
-                  <span
-                    className="text-[10px]
-                    tracking-wide text-[#B7C4CF]"
-                  >
-                    Heart
-                  </span>
-                </div>
-              </div>
-
-              <span
-                className="text-xs mt-2 text-[#967E76]"
-              >
-                / 120
-              </span>
-            </div>
+            <StatRing
+              label="Heart"
+              value="72"
+              target="120"
+              color="border-[#967E76]"
+            />
           </div>
 
           {/* Stopwatch */}
@@ -193,9 +114,7 @@ function App() {
                 bg-[#D7C0AE]
                 px-4 py-2"
               >
-                <span
-                  className="text-xs text-[#967E76]"
-                >
+                <span className="text-xs text-[#967E76]">
                   LAP 1 · 00:58.20
                 </span>
               </div>
@@ -205,9 +124,7 @@ function App() {
                 bg-[#D7C0AE]
                 px-4 py-2"
               >
-                <span
-                  className="text-xs text-[#967E76]"
-                >
+                <span className="text-xs text-[#967E76]">
                   LAP 2 · 00:25.25
                 </span>
               </div>
