@@ -4,6 +4,7 @@ import TimeDisplay from './components/TimeDisplay';
 import StopwatchWidget from './components/StopwatchWidget';
 import ModeToggle from './components/ModeToggle';
 import StatRing from './components/StatRing';
+import SyncStatus from './components/SyncStatus';
 
 import { useStopwatch } from './hooks/useStopwatch';
 import { useStats } from './hooks/useStats';
@@ -66,24 +67,21 @@ function App() {
               <StatRing label="BPM" value={stats.heartRate} color="border-[#9FCB98]" />
             </div>
             
-            <div className="w-full flex flex-col items-center mt-5">
+           <div className="w-full flex flex-col items-center mt-5">
               <button 
                 onClick={syncStats}
                 disabled={isSyncing}
                 className="bg-[#346739] text-[#F2EDC2] px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#79AE6F] active:scale-95 transition-all shadow-md disabled:opacity-50"
               >
-                {isSyncing ? 'Syncing...' : 'Sync Stats'}
+                Sync Stats
               </button>
               
-              {syncError && (
-                <span className="text-red-500 text-[10px] mt-1 font-medium bg-red-100 px-2 py-0.5 rounded">
-                  {syncError}
-                </span>
-              )}
+              <div className="mt-2 h-8">
+                <SyncStatus isSyncing={isSyncing} error={syncError} onRetry={syncStats} />
+              </div>
             </div>
-
           </div>
-        ) : (
+          ) : (
           <StopwatchWidget 
             elapsed={elapsed} 
             isRunning={isRunning} 
