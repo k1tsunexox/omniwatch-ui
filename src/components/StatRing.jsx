@@ -29,7 +29,7 @@ function StatRing({ label, value, target, color }) {
       <span
         className="text-xs mt-2 text-[#967E76]"
       >
-        / {target}
+       {target}
       </span>
     </div>
   )

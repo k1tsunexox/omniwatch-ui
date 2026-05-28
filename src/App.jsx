@@ -5,7 +5,7 @@ import StopwatchWidget from './components/StopwatchWidget';
 import ModeToggle from './components/ModeToggle';
 import StatRing from './components/StatRing';
 
-// Import our new hooks and context!
+// Hooks
 import { useStopwatch } from './hooks/useStopwatch';
 import { useStats } from './hooks/useStats';
 import { useWatch } from './WatchContext';
@@ -14,13 +14,9 @@ function App() {
   const [time, setTime] = useState(new Date());
   const [currentMode, setCurrentMode] = useState('clock');
   
-  // 1. Context Hook
   const { timeFormat } = useWatch();
-  
-  // 2. Stopwatch Hook
   const { elapsed, isRunning, lapTimes, start, stop, reset, lap } = useStopwatch();
   
-  // 3. Stats Hook (Setting initial default values for the UI)
   const { stats, isSyncing, syncError, syncStats } = useStats({
     steps: 8432,
     calories: 420,
@@ -33,34 +29,47 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#E8E6D9] flex items-center justify-center p-4 font-sans">
+    <div className="min-h-screen bg-[#FCFBF7] flex items-center justify-center p-4 font-sans">
       <WatchFrame>
-        <ModeToggle currentMode={currentMode} onModeChange={setCurrentMode} />
+        
+        {/* Toggle Button */}
+        <div className="w-full flex justify-center z-50 relative mb-2">
+          <ModeToggle currentMode={currentMode} onModeChange={setCurrentMode} />
+        </div>
         
         {currentMode === 'clock' ? (
-          <div className="flex flex-col items-center justify-center w-full">
+          <div className="flex flex-col items-center w-full">
+            
             <TimeDisplay 
               hours={time.getHours().toString().padStart(2, '0')} 
               minutes={time.getMinutes().toString().padStart(2, '0')} 
               seconds={time.getSeconds().toString().padStart(2, '0')} 
             />
             
-            {/* Displaying our dynamic stats! */}
-            <div className="flex gap-2 w-full justify-center mt-4">
+            {/* Stat Rings */}
+            <div className="flex gap-2 w-full justify-center">
               <StatRing label="Steps" value={stats.steps} color="border-[#346739]" />
               <StatRing label="Cals" value={stats.calories} color="border-[#79AE6F]" />
               <StatRing label="BPM" value={stats.heartRate} color="border-[#9FCB98]" />
             </div>
             
-            {/* A quick mock sync button for Day 4 prep */}
-            <button 
-              onClick={syncStats}
-              disabled={isSyncing}
-              className="mt-6 bg-[#346739] text-[#F2EDC2] px-5 py-1.5 rounded-full text-[10px] font-semibold uppercase tracking-widest hover:bg-[#79AE6F] transition-colors disabled:opacity-50"
-            >
-              {isSyncing ? 'Syncing...' : 'Sync Stats'}
-            </button>
-            {syncError && <span className="text-red-500 text-[10px] mt-1 font-medium">{syncError}</span>}
+            {/* Sync Button - Now pulled up into view! */}
+            <div className="w-full flex flex-col items-center mt-5">
+              <button 
+                onClick={syncStats}
+                disabled={isSyncing}
+                className="bg-[#346739] text-[#F2EDC2] px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#79AE6F] active:scale-95 transition-all shadow-md disabled:opacity-50"
+              >
+                {isSyncing ? 'Syncing...' : 'Sync Stats'}
+              </button>
+              
+              {syncError && (
+                <span className="text-red-500 text-[10px] mt-1 font-medium bg-red-100 px-2 py-0.5 rounded">
+                  {syncError}
+                </span>
+              )}
+            </div>
+
           </div>
         ) : (
           <StopwatchWidget 
