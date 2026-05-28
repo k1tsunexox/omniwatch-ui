@@ -5,7 +5,7 @@ export default function ModeToggle({ currentMode, onModeChange }) {
   return (
     <button
       onClick={() => {
-        console.log("Button Clicked! Attempting to switch to:", nextMode);
+        ("Button Clicked! Attempting to switch to:", nextMode);
         onModeChange(nextMode);
       }}
       className="bg-[#346739] text-[#F2EDC2] px-4 py-1.5 rounded-full text-[10px] font-semibold uppercase tracking-widest hover:bg-[#79AE6F] transition-colors mb-4 shadow-sm relative z-50 cursor-pointer"
