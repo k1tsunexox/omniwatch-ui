@@ -1,61 +1,52 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useReducer } from 'react';
 import WatchFrame from './components/WatchFrame';
 import TimeDisplay from './components/TimeDisplay';
 import StopwatchWidget from './components/StopwatchWidget';
 import ModeToggle from './components/ModeToggle';
+import { stopwatchReducer, initialState } from './stopwatchReducer';
 
 function App() {
   // ==========================================
-  // 1. CLOCK & MODE STATE
+  // 1. CLOCK & MODE STATE (Unchanged)
   // ==========================================
   const [time, setTime] = useState(new Date());
-  const [currentMode, setCurrentMode] = useState('clock'); // 'clock' or 'stopwatch'
+  const [currentMode, setCurrentMode] = useState('clock');
 
-  // Clock Ticker Effect
   useEffect(() => {
     const timerId = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(timerId); // Cleanup on unmount
+    return () => clearInterval(timerId); 
   }, []);
 
   // ==========================================
-  // 2. STOPWATCH STATE (Day 3 - useRef Update)
+  // 2. STOPWATCH STATE (UPDATED TO useReducer)
   // ==========================================
-  const [displayedElapsed, setDisplayedElapsed] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
-  const [lapTimes, setLapTimes] = useState([]);
+  const [state, dispatch] = useReducer(stopwatchReducer, initialState);
   
-  // Refs to prevent stale closures and unnecessary re-renders
+  // The interval ID still lives in a useRef because it is a side-effect handle, not data model state.
   const intervalRef = useRef(null);
-  const elapsedRef = useRef(0);
 
   // ==========================================
-  // 3. STOPWATCH HANDLERS
+  // 3. HANDLERS (UPDATED TO DISPATCH ACTIONS)
   // ==========================================
   const handleStart = useCallback(() => {
-    if (isRunning) return;
-    setIsRunning(true);
-    
+    dispatch({ type: 'START' });
     intervalRef.current = setInterval(() => {
-      elapsedRef.current += 10;
-      setDisplayedElapsed(elapsedRef.current);
+      dispatch({ type: 'TICK' });
     }, 10);
-  }, [isRunning]);
+  }, []); // Empty dependencies because handlers only call dispatch[cite: 1]
 
   const handleStop = useCallback(() => {
-    setIsRunning(false);
+    dispatch({ type: 'STOP' });
     clearInterval(intervalRef.current);
   }, []);
 
   const handleReset = useCallback(() => {
-    setIsRunning(false);
+    dispatch({ type: 'RESET' });
     clearInterval(intervalRef.current);
-    elapsedRef.current = 0;
-    setDisplayedElapsed(0);
-    setLapTimes([]);
   }, []);
 
   const handleLap = useCallback(() => {
-    setLapTimes(prev => [...prev, elapsedRef.current]);
+    dispatch({ type: 'LAP' });
   }, []);
 
   // ==========================================
@@ -74,9 +65,9 @@ function App() {
           />
         ) : (
           <StopwatchWidget 
-            elapsed={displayedElapsed} 
-            isRunning={isRunning} 
-            lapTimes={lapTimes}
+            elapsed={state.elapsed} 
+            isRunning={state.isRunning} 
+            lapTimes={state.lapTimes}
             onStart={handleStart}
             onStop={handleStop}
             onReset={handleReset}
