@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import WatchFrame from './components/WatchFrame';
 import TimeDisplay from './components/TimeDisplay';
 import StopwatchWidget from './components/StopwatchWidget';
@@ -18,39 +18,45 @@ function App() {
   }, []);
 
   // ==========================================
-  // 2. STOPWATCH STATE
+  // 2. STOPWATCH STATE (Day 3 - useRef Update)
   // ==========================================
-  const [elapsed, setElapsed] = useState(0);
+  const [displayedElapsed, setDisplayedElapsed] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [lapTimes, setLapTimes] = useState([]);
-
-  // Stopwatch Ticker Effect
-  useEffect(() => {
-    let interval;
-    if (isRunning) {
-      interval = setInterval(() => {
-        setElapsed(prev => prev + 10);
-      }, 10);
-    }
-    return () => clearInterval(interval);
-  }, [isRunning]);
+  
+  // Refs to prevent stale closures and unnecessary re-renders
+  const intervalRef = useRef(null);
+  const elapsedRef = useRef(0);
 
   // ==========================================
   // 3. STOPWATCH HANDLERS
   // ==========================================
-  const handleStart = useCallback(() => setIsRunning(true), []);
-  
-  const handleStop = useCallback(() => setIsRunning(false), []);
-  
+  const handleStart = useCallback(() => {
+    if (isRunning) return;
+    setIsRunning(true);
+    
+    intervalRef.current = setInterval(() => {
+      elapsedRef.current += 10;
+      setDisplayedElapsed(elapsedRef.current);
+    }, 10);
+  }, [isRunning]);
+
+  const handleStop = useCallback(() => {
+    setIsRunning(false);
+    clearInterval(intervalRef.current);
+  }, []);
+
   const handleReset = useCallback(() => {
     setIsRunning(false);
-    setElapsed(0);
+    clearInterval(intervalRef.current);
+    elapsedRef.current = 0;
+    setDisplayedElapsed(0);
     setLapTimes([]);
   }, []);
-  
+
   const handleLap = useCallback(() => {
-    setLapTimes(prev => [...prev, elapsed]);
-  }, [elapsed]);
+    setLapTimes(prev => [...prev, elapsedRef.current]);
+  }, []);
 
   // ==========================================
   // 4. RENDER
@@ -69,7 +75,7 @@ function App() {
         />
       ) : (
         <StopwatchWidget 
-          elapsed={elapsed} 
+          elapsed={displayedElapsed} 
           isRunning={isRunning} 
           lapTimes={lapTimes}
           onStart={handleStart}
