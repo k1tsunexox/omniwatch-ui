@@ -56,29 +56,29 @@ function App() {
   // 4. RENDER
   // ==========================================
   return (
-    <WatchFrame>
-      {/* The Mode Toggle stays visible in both modes */}
-      <ModeToggle currentMode={currentMode} onModeChange={setCurrentMode} />
-      
-      {/* Conditional Rendering based on currentMode */}
-      {currentMode === 'clock' ? (
-        <TimeDisplay 
-          hours={time.getHours().toString().padStart(2, '0')} 
-          minutes={time.getMinutes().toString().padStart(2, '0')} 
-          seconds={time.getSeconds().toString().padStart(2, '0')} 
-        />
-      ) : (
-        <StopwatchWidget 
-          elapsed={elapsed} 
-          isRunning={isRunning} 
-          lapTimes={lapTimes}
-          onStart={handleStart}
-          onStop={handleStop}
-          onReset={handleReset}
-          onLap={handleLap}
-        />
-      )}
-    </WatchFrame>
+    <div className="min-h-screen bg-[#E8E6D9] flex items-center justify-center p-4 font-sans">
+      <WatchFrame>
+        <ModeToggle currentMode={currentMode} onModeChange={setCurrentMode} />
+        
+        {currentMode === 'clock' ? (
+          <TimeDisplay 
+            hours={time.getHours().toString().padStart(2, '0')} 
+            minutes={time.getMinutes().toString().padStart(2, '0')} 
+            seconds={time.getSeconds().toString().padStart(2, '0')} 
+          />
+        ) : (
+          <StopwatchWidget 
+            elapsed={displayedElapsed} 
+            isRunning={isRunning} 
+            lapTimes={lapTimes}
+            onStart={handleStart}
+            onStop={handleStop}
+            onReset={handleReset}
+            onLap={handleLap}
+          />
+        )}
+      </WatchFrame>
+    </div>
   );
 }
 
