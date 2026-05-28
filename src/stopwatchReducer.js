@@ -13,7 +13,6 @@ export function stopwatchReducer(state, action) {
     case 'RESET':
       return initialState;
     case 'TICK':
-      // Incrementing by 10 to keep our smooth centiseconds timing
       return { ...state, elapsed: state.elapsed + 10 }; 
     case 'LAP':
       return { ...state, lapTimes: [...state.lapTimes, state.elapsed] };

@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-// The helper function provided by USHER
+
 function simulateSyncAPI() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {

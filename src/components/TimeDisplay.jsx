@@ -1,6 +1,5 @@
 export default function TimeDisplay({ hours, minutes, seconds }) {
   return (
-    // Removed flex-1 so it stops pushing the sync button off the screen!
     <div className="flex flex-col items-center justify-center w-full mb-4 mt-2">
       <div className="flex items-baseline">
         <span className="text-6xl font-black text-[#346739] tracking-tighter">
